@@ -38,3 +38,5 @@ env:
   - TEST_PACKAGE=bootstrap/test
   - TEST_PACKAGE=charts/test
   - TEST_PACKAGE="benchmarks-frontend/compile"
+  - TEST_PACKAGE="doc"
+  - TEST_PACKAGE="test:doc"
