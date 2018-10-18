@@ -19,7 +19,7 @@ before_script:
   - export PATH=$PWD/geckodriver:$PATH
 
 script:
-  - xvfb-run sbt ++$TRAVIS_SCALA_VERSION $TEST_PACKAGE
+  - xvfb-run sbt -mem 2048 ++$TRAVIS_SCALA_VERSION $TEST_PACKAGE
 
 jdk:
   - oraclejdk8
