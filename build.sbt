@@ -74,6 +74,12 @@ val noPublishSettings = Seq(
   doc := (doc / target).value,
 )
 
+val aggregateProjectSettings =
+  commonSettings ++ noPublishSettings ++ Seq(
+    ideSkipProject := true,
+    ideExcludedDirectories := Seq(baseDirectory.value)
+  )
+
 def mkSourceDirs(base: File, scalaBinary: String, conf: String): Seq[File] = Seq(
   base / "src" / conf / "scala",
   base / "src" / conf / s"scala-$scalaBinary",
@@ -125,17 +131,16 @@ def jsProjectFor(jsProj: Project, jvmProj: Project): Project =
     )
 
 lazy val udash = project.in(file("."))
-  .aggregate(
-    macros,
-    core, `core-js`,
-    rpc, `rpc-js`,
-    rest, `rest-js`,
-    i18n, `i18n-js`,
-    auth, `auth-js`,
-    css, `css-js`,
-    bootstrap, charts
-  )
+  .aggregate(`udash-jvm`, `udash-js`, selenium, `selenium-js`)
   .settings(noPublishSettings)
+
+lazy val `udash-jvm` = project.in(file(".jvm"))
+  .aggregate(macros, core, rpc, rest, i18n, auth, css)
+  .settings(aggregateProjectSettings)
+
+lazy val `udash-js` = project.in(file(".js"))
+  .aggregate(`core-js`, `rpc-js`, `rest-js`, `i18n-js`, `auth-js`, `css-js`, bootstrap, charts, benchmarks)
+  .settings(aggregateProjectSettings)
 
 lazy val macros = project
   .settings(
